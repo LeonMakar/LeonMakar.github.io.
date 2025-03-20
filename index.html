@@ -209,40 +209,40 @@
             console.log('%c' + message, 'color: #FFDF73; background-color: #454545');
         }
 
-        InitYSDK();
-        async function InitYSDK() {
-            try {
-                if (IsLocalHost()) return;
+        //InitYSDK();
+        //async function InitYSDK() {
+        //    try {
+        //        if (IsLocalHost()) return;
 
-                ysdk = await YaGames.init();
+        //        ysdk = await YaGames.init();
 
-                // Additional init0 modules
+        //        // Additional init0 modules
 
-                // Additional init1 modules
+        //        // Additional init1 modules
 
-                // Additional init2 modules
+        //        // Additional init2 modules
 
-                // Additional init modules
+        //        // Additional init modules
 
-                initYSDK = true;
-                if (ygGameInstance != null)
-                    ygGameInstance.SendMessage('YG2Instance', 'InitSDKComplete');
+        //        initYSDK = true;
+        //        if (ygGameInstance != null)
+        //            ygGameInstance.SendMessage('YG2Instance', 'InitSDKComplete');
 
-                LogStyledMessage('Init YandexSDK Success');
+        //        LogStyledMessage('Init YandexSDK Success');
 
-            } catch (e) {
-                console.error('CRASH Initialization SDK: ', e);
-            }
+        //    } catch (e) {
+        //        console.error('CRASH Initialization SDK: ', e);
+        //    }
 
-            if (!IsLocalHost() && !syncInit)
-                StartUnityInstance_IfUnloaded();
-        }
+        //    if (!IsLocalHost() && !syncInit)
+        //        StartUnityInstance_IfUnloaded();
+        //}
 
-        function InitGame() {
-            initGame = true;
+        //function InitGame() {
+        //    initGame = true;
 
-            // Additional start modules
-        }
+        //    // Additional start modules
+        //}
 
         // Additional script modules
 
