@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./style.css">
 
     <!-- Yandex Games SDK -->
-    //<script src="/sdk.js"></script>
+    <!--<script src="/sdk.js"></script>-->
 
     <style>
         canvas:focus {
@@ -30,7 +30,7 @@
     </style>
 
     <!-- Additional head modules -->
-//<script src="https://sdk.games.s3.yandex.net/sdk.js"></script>
+<!--<script src="https://sdk.games.s3.yandex.net/sdk.js"></script>-->
 
 
 </head>
@@ -92,159 +92,159 @@
             
         }
 
-        // The background image when loading the game. When building a build, the code changes depending on the project settings.
-        loadingCover.style.background = "url('Images/background.png') center / cover";
-        loadingCover.style.display = "";
+        //// The background image when loading the game. When building a build, the code changes depending on the project settings.
+        //loadingCover.style.background = "url('Images/background.png') center / cover";
+        //loadingCover.style.display = "";
 
-        let StartUnityInstance;
-        let ygGameInstance = null;
-        let ysdk = null;
-        let initYSDK = false;
-        let initGame = false;
-        let syncInit = false;
-        const NO_DATA = 'no data';
+        //let StartUnityInstance;
+        //let ygGameInstance = null;
+        //let ysdk = null;
+        //let initYSDK = false;
+        //let initGame = false;
+        //let syncInit = false;
+        //const NO_DATA = 'no data';
 
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        function FocusGame() {
-            window.focus();
-            canvas.focus();
-        }
-        window.addEventListener('pointerdown', () => {
-            FocusGame();
-        });
-        window.addEventListener('touchstart', () => {
-            FocusGame();
-        });
+        //document.addEventListener('contextmenu', event => event.preventDefault());
+        //function FocusGame() {
+        //    window.focus();
+        //    canvas.focus();
+        //}
+        //window.addEventListener('pointerdown', () => {
+        //    FocusGame();
+        //});
+        //window.addEventListener('touchstart', () => {
+        //    FocusGame();
+        //});
 
-        document.addEventListener('visibilitychange', function () {
-            if (ysdk !== null && initGame == true) {
-                if (document.hidden) {
-                    YG2Instance('SetFocusWindowGame', 'false');
-                }
-                else {
-                    YG2Instance('SetFocusWindowGame', 'true');
+        //document.addEventListener('visibilitychange', function () {
+        //    if (ysdk !== null && initGame == true) {
+        //        if (document.hidden) {
+        //            YG2Instance('SetFocusWindowGame', 'false');
+        //        }
+        //        else {
+        //            YG2Instance('SetFocusWindowGame', 'true');
 
-                    if ((ysdk.deviceInfo.isMobile() || ysdk.deviceInfo.isTablet()) && ysdk.screen.fullscreen.status == 'off')
-                        ysdk.screen.fullscreen.request();
-                }
-            }
-        });
+        //            if ((ysdk.deviceInfo.isMobile() || ysdk.deviceInfo.isTablet()) && ysdk.screen.fullscreen.status == 'off')
+        //                ysdk.screen.fullscreen.request();
+        //        }
+        //    }
+        //});
 
-        const script = document.createElement("script");
-        script.src = loaderUrl;
-        script.onload = () => {
-            StartUnityInstance = function () {
-                createUnityInstance(canvas, config, (progress) => {
-                    spinner.style.display = "none";
-                    progressBarEmpty.style.display = "";
-                    const adjustedProgress = Math.max(progress, 0.05);
-                    progressBarFull.style.width = `${100 * adjustedProgress}%`;
-                }).then((unityInstance) => {
-                    ygGameInstance = unityInstance;
-                    loadingCover.style.display = "none";
-                }).catch((message) => {
-                    console.error(message);
-                });
-            };
+        //const script = document.createElement("script");
+        //script.src = loaderUrl;
+        //script.onload = () => {
+        //    StartUnityInstance = function () {
+        //        createUnityInstance(canvas, config, (progress) => {
+        //            spinner.style.display = "none";
+        //            progressBarEmpty.style.display = "";
+        //            const adjustedProgress = Math.max(progress, 0.05);
+        //            progressBarFull.style.width = `${100 * adjustedProgress}%`;
+        //        }).then((unityInstance) => {
+        //            ygGameInstance = unityInstance;
+        //            loadingCover.style.display = "none";
+        //        }).catch((message) => {
+        //            console.error(message);
+        //        });
+        //    };
             
-            if (IsLocalHost() || syncInit)
-                StartUnityInstance_IfUnloaded();
-        };
+        //    if (IsLocalHost() || syncInit)
+        //        StartUnityInstance_IfUnloaded();
+        //};
 
-        function StartUnityInstance_IfUnloaded() {
-            if (spinner.style.display !== "none")
-                StartUnityInstance();
-        }
+        //function StartUnityInstance_IfUnloaded() {
+        //    if (spinner.style.display !== "none")
+        //        StartUnityInstance();
+        //}
 
-        function IsLocalHost() {
-            try {
-                if (window.top !== window) {
-                    console.warn("The application is running in an iframe");
-                    return false;
-                }
+        //function IsLocalHost() {
+        //    try {
+        //        if (window.top !== window) {
+        //            console.warn("The application is running in an iframe");
+        //            return false;
+        //        }
 
-                const host = window.location.hostname;
-                if (host === "localhost" || host === "127.0.0.1" || host.endsWith(".local")) {
-                    LogStyledMessage("Local Host");
-                    return true;
-                }
-            } 
-            catch (error) {
-                console.error("Error checking the local host:", error);
-                return false;
-            }
-        }
+        //        const host = window.location.hostname;
+        //        if (host === "localhost" || host === "127.0.0.1" || host.endsWith(".local")) {
+        //            LogStyledMessage("Local Host");
+        //            return true;
+        //        }
+        //    } 
+        //    catch (error) {
+        //        console.error("Error checking the local host:", error);
+        //        return false;
+        //    }
+        //}
 
-        function YG2Instance(method) {
-            if (ygGameInstance == null)
-                return;
+        //function YG2Instance(method) {
+        //    if (ygGameInstance == null)
+        //        return;
 
-            if (!initGame) {
-                setTimeout(function () {
-                    if (ygGameInstance)
-                        ygGameInstance.SendMessage('YG2Instance', method);
-                }, 100);
-            }
-            else {
-                ygGameInstance.SendMessage('YG2Instance', method);
-            }
+        //    if (!initGame) {
+        //        setTimeout(function () {
+        //            if (ygGameInstance)
+        //                ygGameInstance.SendMessage('YG2Instance', method);
+        //        }, 100);
+        //    }
+        //    else {
+        //        ygGameInstance.SendMessage('YG2Instance', method);
+        //    }
                 
-        }
-        function YG2Instance(method, arg) {
-            if (ygGameInstance == null)
-                return;
+        //}
+        //function YG2Instance(method, arg) {
+        //    if (ygGameInstance == null)
+        //        return;
 
-            if (!initGame) {
-                setTimeout(function () {
-                    ygGameInstance.SendMessage('YG2Instance', method, arg);
-                }, 100);
-            }
-            else {
-                ygGameInstance.SendMessage('YG2Instance', method, arg);
-            }
-        }
+        //    if (!initGame) {
+        //        setTimeout(function () {
+        //            ygGameInstance.SendMessage('YG2Instance', method, arg);
+        //        }, 100);
+        //    }
+        //    else {
+        //        ygGameInstance.SendMessage('YG2Instance', method, arg);
+        //    }
+        //}
 
-        function LogStyledMessage(message, style) {
-            console.log('%c' + message, style);
-        }
-        function LogStyledMessage(message) {
-            console.log('%c' + message, 'color: #FFDF73; background-color: #454545');
-        }
+        //function LogStyledMessage(message, style) {
+        //    console.log('%c' + message, style);
+        //}
+        //function LogStyledMessage(message) {
+        //    console.log('%c' + message, 'color: #FFDF73; background-color: #454545');
+        //}
 
-       // InitYSDK();
-        async function InitYSDK() {
-            try {
-                if (IsLocalHost()) return;
+        //InitYSDK();
+        //async function InitYSDK() {
+        //    try {
+        //        if (IsLocalHost()) return;
 
-                ysdk = await YaGames.init();
+        //        ysdk = await YaGames.init();
 
-                // Additional init0 modules
+        //        // Additional init0 modules
 
-                // Additional init1 modules
+        //        // Additional init1 modules
 
-                // Additional init2 modules
+        //        // Additional init2 modules
 
-                // Additional init modules
+        //        // Additional init modules
 
-                initYSDK = true;
-                if (ygGameInstance != null)
-                    ygGameInstance.SendMessage('YG2Instance', 'InitSDKComplete');
+        //        initYSDK = true;
+        //        if (ygGameInstance != null)
+        //            ygGameInstance.SendMessage('YG2Instance', 'InitSDKComplete');
 
-                LogStyledMessage('Init YandexSDK Success');
+        //        LogStyledMessage('Init YandexSDK Success');
 
-            } catch (e) {
-                console.error('CRASH Initialization SDK: ', e);
-            }
+        //    } catch (e) {
+        //        console.error('CRASH Initialization SDK: ', e);
+        //    }
 
-            if (!IsLocalHost() && !syncInit)
-                StartUnityInstance_IfUnloaded();
-        }
+        //    if (!IsLocalHost() && !syncInit)
+        //        StartUnityInstance_IfUnloaded();
+        //}
 
-        function InitGame() {
-            initGame = true;
+        //function InitGame() {
+        //    initGame = true;
 
-            // Additional start modules
-        }
+        //    // Additional start modules
+        //}
 
         // Additional script modules
 LogStyledMessage('PluginYG2 v2.0032  build: 1');
