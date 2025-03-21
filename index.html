@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./style.css">
 
-    <!-- Yandex Games SDK -->
-    <!--<script src="/sdk.js"></script>-->
 
     <style>
         canvas:focus {
@@ -29,10 +27,8 @@
         }
     </style>
 
-    <!-- Additional head modules -->
-<!--<script src="https://sdk.games.s3.yandex.net/sdk.js"></script>-->
 
-
+    <title>Unity Web Player | kantantaWeb</title>
 </head>
 <body class="dark">
 
@@ -48,22 +44,18 @@
             <div class="spinner"></div>
         </div>
     </div>
-
-    <!-- Additional body modules -->
-
+    <script src="Build/proto.loader.js"></script>
     <script>
-        const hideFullScreenButton = "";
-        const buildUrl = "Build";
-        const loaderUrl = buildUrl + "/KantaProto.loader.js";
-        const config = {
-            dataUrl: buildUrl + "/KantaProto.data.unityweb",
-            frameworkUrl: buildUrl + "/KantaProto.framework.js.unityweb",
-            codeUrl: buildUrl + "/KantaProto.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-            companyName: "DefaultCompany",
-            productName: "kantantaWeb",
-            productVersion: "1.0"
-        };
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+
+        document.body.style.textAlign = "left";
+      }
+
 
         const container = document.querySelector("#unity-container");
         const canvas = document.querySelector("#unity-canvas");
@@ -87,170 +79,18 @@
             return false;
         }());
 
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            container.className = "unity-mobile";
-            
-        }
-
-        //// The background image when loading the game. When building a build, the code changes depending on the project settings.
-        loadingCover.style.background = "url('Images/background.png') center / cover";
-        loadingCover.style.display = "";
-
-        let StartUnityInstance;
-        let ygGameInstance = null;
-        let ysdk = null;
-        let initYSDK = false;
-        let initGame = false;
-        let syncInit = false;
-        const NO_DATA = 'no data';
-
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        function FocusGame() {
-            window.focus();
-            canvas.focus();
-        }
-        window.addEventListener('pointerdown', () => {
-            FocusGame();
-        });
-        window.addEventListener('touchstart', () => {
-            FocusGame();
-        });
-
-        document.addEventListener('visibilitychange', function () {
-            if (ysdk !== null && initGame == true) {
-                if (document.hidden) {
-                    YG2Instance('SetFocusWindowGame', 'false');
-                }
-                else {
-                    YG2Instance('SetFocusWindowGame', 'true');
-
-                    if ((ysdk.deviceInfo.isMobile() || ysdk.deviceInfo.isTablet()) && ysdk.screen.fullscreen.status == 'off')
-                        ysdk.screen.fullscreen.request();
-                }
-            }
-        });
-
-        const script = document.createElement("script");
-        script.src = loaderUrl;
-        script.onload = () => {
-            StartUnityInstance = function () {
-                createUnityInstance(canvas, config, (progress) => {
-                    spinner.style.display = "none";
-                    progressBarEmpty.style.display = "";
-                    const adjustedProgress = Math.max(progress, 0.05);
-                    progressBarFull.style.width = `${100 * adjustedProgress}%`;
-                }).then((unityInstance) => {
-                    ygGameInstance = unityInstance;
-                    loadingCover.style.display = "none";
-                }).catch((message) => {
-                    console.error(message);
-                });
-            };
-            
-            if (IsLocalHost() || syncInit)
-                StartUnityInstance_IfUnloaded();
-        };
-
-        function StartUnityInstance_IfUnloaded() {
-            if (spinner.style.display !== "none")
-                StartUnityInstance();
-        }
-
-        function IsLocalHost() {
-            try {
-                if (window.top !== window) {
-                    console.warn("The application is running in an iframe");
-                    return false;
-                }
-
-                const host = window.location.hostname;
-                if (host === "localhost" || host === "127.0.0.1" || host.endsWith(".local")) {
-                    LogStyledMessage("Local Host");
-                    return true;
-                }
-            } 
-            catch (error) {
-                console.error("Error checking the local host:", error);
-                return false;
-            }
-        }
-
-        function YG2Instance(method) {
-            if (ygGameInstance == null)
-                return;
-
-            if (!initGame) {
-                setTimeout(function () {
-                    if (ygGameInstance)
-                        ygGameInstance.SendMessage('YG2Instance', method);
-                }, 100);
-            }
-            else {
-                ygGameInstance.SendMessage('YG2Instance', method);
-            }
-               
-        }
-        function YG2Instance(method, arg) {
-            if (ygGameInstance == null)
-                return;
-
-            if (!initGame) {
-                setTimeout(function () {
-                    ygGameInstance.SendMessage('YG2Instance', method, arg);
-                }, 100);
-            }
-            else {
-                ygGameInstance.SendMessage('YG2Instance', method, arg);
-            }
-        }
-
-        function LogStyledMessage(message, style) {
-            console.log('%c' + message, style);
-        }
-        function LogStyledMessage(message) {
-            console.log('%c' + message, 'color: #FFDF73; background-color: #454545');
-        }
-
-        //InitYSDK();
-        //async function InitYSDK() {
-        //    try {
-        //        if (IsLocalHost()) return;
-
-        //        ysdk = await YaGames.init();
-
-        //        // Additional init0 modules
-
-        //        // Additional init1 modules
-
-        //        // Additional init2 modules
-
-        //        // Additional init modules
-
-        //        initYSDK = true;
-        //        if (ygGameInstance != null)
-        //            ygGameInstance.SendMessage('YG2Instance', 'InitSDKComplete');
-
-        //        LogStyledMessage('Init YandexSDK Success');
-
-        //    } catch (e) {
-        //        console.error('CRASH Initialization SDK: ', e);
-        //    }
-
-        //    if (!IsLocalHost() && !syncInit)
-        //        StartUnityInstance_IfUnloaded();
-        //}
-
-        function InitGame() {
-            initGame = true;
-
-            // Additional start modules
-        }
-
-//        // Additional script modules
-//LogStyledMessage('PluginYG2 v2.0032  build: 1');
-
-
-        document.body.appendChild(script);
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        arguments: [],
+        dataUrl: "Build/proto.data.unityweb",
+        frameworkUrl: "Build/proto.framework.js.unityweb",
+        codeUrl: "Build/proto.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "kantantaWeb",
+        productVersion: "1.0",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      });
     </script>
-</body>
+  </body>
 </html>
